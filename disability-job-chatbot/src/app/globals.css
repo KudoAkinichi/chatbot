@@ -1,0 +1,138 @@
+@layer theme, base, components, utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 246, 246, 246;
+  --background-end-rgb: 255, 255, 255;
+}
+
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 21, 21, 21;
+  --background-end-rgb: 30, 30, 30;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Accessibility Classes */
+body.grayscale {
+  filter: grayscale(100%);
+}
+
+body.high-contrast {
+  background: black;
+  color: yellow;
+}
+
+body.high-contrast button,
+body.high-contrast input {
+  background: black;
+  color: yellow;
+  border: 2px solid yellow;
+}
+
+body.negative-contrast {
+  filter: invert(100%);
+}
+
+body.light-background {
+  background: white;
+  color: black;
+}
+
+body.light-background button,
+body.light-background input {
+  background: #f0f0f0;
+  color: black;
+}
+
+body.underline-links a {
+  text-decoration: underline;
+}
+
+body.readable-font {
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+body.readable-font h1,
+body.readable-font h2,
+body.readable-font h3,
+body.readable-font h4,
+body.readable-font h5,
+body.readable-font h6 {
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+/* Focus styles for accessibility */
+:focus {
+  outline: 3px solid #1e88e5;
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid #1e88e5;
+  outline-offset: 2px;
+}
+
+/* Keyboard focus indicator */
+.keyboard-focus-indicator {
+  position: fixed;
+  z-index: 999;
+  bottom: 8px;
+  left: 8px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.keyboard-focus-indicator.visible {
+  opacity: 1;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -999px;
+  left: 0;
+  background: #1e88e5;
+  color: white;
+  padding: 10px;
+  z-index: 9999;
+  transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Enhance the contrast ratio for better readability */
+@media (prefers-contrast: more) {
+  body {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 255, 255, 255;
+    --background-end-rgb: 255, 255, 255;
+  }
+
+  .dark {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}

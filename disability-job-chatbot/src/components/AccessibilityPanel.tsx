@@ -31,162 +31,343 @@ export default function AccessibilityPanel() {
   } = useAccessibility();
 
   return (
-    <div className="fixed top-1/3 right-0 z-50">
+    <div className="accessibility-container">
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-blue-600 text-white p-3 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="accessibility-toggle"
         aria-label={
           isOpen ? "Close accessibility panel" : "Open accessibility panel"
         }
       >
         {isOpen ? (
           <>
-            <ChevronRight size={24} /> <span className="sr-only">Close</span>
+            <ChevronRight size={20} /> <span className="sr-only">Close</span>
           </>
         ) : (
           <>
-            <ChevronLeft size={24} /> <span>Accessibility</span>
+            <ChevronLeft size={20} /> <span>Accessibility</span>
           </>
         )}
       </button>
 
       {/* Accessibility Panel */}
       <div
-        className={`absolute top-0 right-0 transform ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 w-64 bg-white dark:bg-gray-800 rounded-l-lg shadow-lg border-l border-t border-b border-gray-300 dark:border-gray-600`}
+        className={`accessibility-panel ${isOpen ? "open" : ""}`}
         role="region"
         aria-label="Accessibility controls"
       >
-        <div className="p-4">
-          <h2 className="text-lg font-bold mb-4 flex items-center justify-between">
-            Accessibility Options
+        <div className="panel-inner">
+          <div className="panel-header">
+            <h2>Accessibility Options</h2>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              className="close-icon"
               aria-label="Close panel"
             >
-              <ChevronRight size={20} />
-            </button>
-          </h2>
-
-          <div className="space-y-4">
-            {/* Text Size Controls */}
-            <div>
-              <h3 className="font-medium mb-2">Text Size</h3>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={decreaseTextSize}
-                  className="p-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 flex-1 flex justify-center"
-                  aria-label="Decrease text size"
-                >
-                  <ZoomOut size={18} />
-                </button>
-                <span className="text-sm">{settings.fontSize}px</span>
-                <button
-                  onClick={increaseTextSize}
-                  className="p-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 flex-1 flex justify-center"
-                  aria-label="Increase text size"
-                >
-                  <ZoomIn size={18} />
-                </button>
-              </div>
-            </div>
-
-            {/* Toggle Options */}
-            <div className="space-y-2">
-              <button
-                onClick={toggleGrayscale}
-                className={`flex items-center justify-between w-full p-2 rounded ${
-                  settings.isGrayscale
-                    ? "bg-blue-100 dark:bg-blue-900"
-                    : "bg-gray-100 dark:bg-gray-700"
-                }`}
-                aria-pressed={settings.isGrayscale}
-              >
-                <span>Grayscale</span>
-                <Contrast size={18} />
-              </button>
-
-              <button
-                onClick={toggleHighContrast}
-                className={`flex items-center justify-between w-full p-2 rounded ${
-                  settings.isHighContrast
-                    ? "bg-blue-100 dark:bg-blue-900"
-                    : "bg-gray-100 dark:bg-gray-700"
-                }`}
-                aria-pressed={settings.isHighContrast}
-              >
-                <span>High Contrast</span>
-                <PanelTopClose size={18} />
-              </button>
-
-              <button
-                onClick={toggleNegativeContrast}
-                className={`flex items-center justify-between w-full p-2 rounded ${
-                  settings.isNegativeContrast
-                    ? "bg-blue-100 dark:bg-blue-900"
-                    : "bg-gray-100 dark:bg-gray-700"
-                }`}
-                aria-pressed={settings.isNegativeContrast}
-              >
-                <span>Negative Contrast</span>
-                <PanelTop size={18} />
-              </button>
-
-              <button
-                onClick={toggleLightBackground}
-                className={`flex items-center justify-between w-full p-2 rounded ${
-                  settings.isLightBackground
-                    ? "bg-blue-100 dark:bg-blue-900"
-                    : "bg-gray-100 dark:bg-gray-700"
-                }`}
-                aria-pressed={settings.isLightBackground}
-              >
-                <span>Light Background</span>
-                <Laptop2 size={18} />
-              </button>
-
-              <button
-                onClick={toggleUnderlineLinks}
-                className={`flex items-center justify-between w-full p-2 rounded ${
-                  settings.areLinksUnderlined
-                    ? "bg-blue-100 dark:bg-blue-900"
-                    : "bg-gray-100 dark:bg-gray-700"
-                }`}
-                aria-pressed={settings.areLinksUnderlined}
-              >
-                <span>Underline Links</span>
-                <Underline size={18} />
-              </button>
-
-              <button
-                onClick={toggleReadableFont}
-                className={`flex items-center justify-between w-full p-2 rounded ${
-                  settings.isReadableFont
-                    ? "bg-blue-100 dark:bg-blue-900"
-                    : "bg-gray-100 dark:bg-gray-700"
-                }`}
-                aria-pressed={settings.isReadableFont}
-              >
-                <span>Readable Font</span>
-                <span className="font-serif">Aa</span>
-              </button>
-            </div>
-
-            {/* Reset Button */}
-            <button
-              onClick={resetSettings}
-              className="flex items-center justify-center gap-2 w-full p-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 rounded hover:bg-red-200 dark:hover:bg-red-800"
-              aria-label="Reset all accessibility settings"
-            >
-              <RotateCcw size={18} />
-              <span>Reset All</span>
+              <ChevronRight size={18} />
             </button>
           </div>
+
+          <div className="section">
+            <h3>Text Size</h3>
+            <div className="text-size-controls">
+              <button onClick={decreaseTextSize}>
+                <ZoomOut size={18} />
+              </button>
+              <span>{settings.fontSize}px</span>
+              <button onClick={increaseTextSize}>
+                <ZoomIn size={18} />
+              </button>
+            </div>
+          </div>
+
+          <div className="toggles">
+            <button
+              onClick={toggleGrayscale}
+              className={`toggle-btn ${settings.isGrayscale ? "active" : ""}`}
+              aria-pressed={settings.isGrayscale}
+            >
+              <span>Grayscale</span>
+              <Contrast size={18} />
+            </button>
+
+            <button
+              onClick={toggleHighContrast}
+              className={`toggle-btn ${settings.isHighContrast ? "active" : ""}`}
+              aria-pressed={settings.isHighContrast}
+            >
+              <span>High Contrast</span>
+              <PanelTopClose size={18} />
+            </button>
+
+            <button
+              onClick={toggleNegativeContrast}
+              className={`toggle-btn ${
+                settings.isNegativeContrast ? "active" : ""
+              }`}
+              aria-pressed={settings.isNegativeContrast}
+            >
+              <span>Negative Contrast</span>
+              <PanelTop size={18} />
+            </button>
+
+            <button
+              onClick={toggleLightBackground}
+              className={`toggle-btn ${
+                settings.isLightBackground ? "active" : ""
+              }`}
+              aria-pressed={settings.isLightBackground}
+            >
+              <span>Light Background</span>
+              <Laptop2 size={18} />
+            </button>
+
+            <button
+              onClick={toggleUnderlineLinks}
+              className={`toggle-btn ${
+                settings.areLinksUnderlined ? "active" : ""
+              }`}
+              aria-pressed={settings.areLinksUnderlined}
+            >
+              <span>Underline Links</span>
+              <Underline size={18} />
+            </button>
+
+            <button
+              onClick={toggleReadableFont}
+              className={`toggle-btn ${
+                settings.isReadableFont ? "active" : ""
+              }`}
+              aria-pressed={settings.isReadableFont}
+            >
+              <span>Readable Font</span>
+              <span style={{ fontFamily: "serif" }}>Aa</span>
+            </button>
+          </div>
+
+          <button onClick={resetSettings} className="reset-btn">
+            <RotateCcw size={18} />
+            <span>Reset All</span>
+          </button>
         </div>
       </div>
+
+      {/* Styles */}
+      <style jsx>{`
+        .accessibility-container {
+          position: fixed;
+          top: 30%;
+          right: 0;
+          z-index: 9999;
+          font-family: system-ui, sans-serif;
+        }
+
+        .accessibility-toggle {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background-color: #2563eb;
+          color: #ffffff;
+          border: none;
+          padding: 10px 16px;
+          border-radius: 8px 0 0 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+
+        .accessibility-toggle:hover {
+          background-color: #1d4ed8;
+        }
+
+        .accessibility-panel {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 280px;
+          background-color: #f9fafb;
+          color: #111827;
+          border-radius: 12px 0 0 12px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+          border: 1px solid #d1d5db;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+        }
+
+        .accessibility-panel.open {
+          transform: translateX(0%);
+        }
+
+        .panel-inner {
+          padding: 16px;
+        }
+
+        .panel-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+        }
+
+        .panel-header h2 {
+          font-size: 16px;
+          font-weight: 700;
+          color: #111827;
+        }
+
+        .close-icon {
+          background: none;
+          border: none;
+          color: #6b7280;
+          cursor: pointer;
+        }
+
+        .section h3 {
+          font-size: 14px;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: #374151;
+        }
+
+        .text-size-controls {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #e5e7eb;
+          border-radius: 8px;
+          padding: 6px 10px;
+          font-weight: 500;
+        }
+
+        .text-size-controls button {
+          background: #d1d5db;
+          border: none;
+          border-radius: 6px;
+          padding: 6px 8px;
+          cursor: pointer;
+          color: #111827;
+          transition: background 0.2s ease;
+        }
+
+        .text-size-controls button:hover {
+          background: #9ca3af;
+        }
+
+        .toggles {
+          margin: 16px 0;
+          display: grid;
+          gap: 10px;
+        }
+
+        .toggle-btn {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          padding: 8px 12px;
+          border-radius: 8px;
+          background-color: #f3f4f6;
+          border: 1px solid #d1d5db;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.2s ease, color 0.2s ease;
+          color: #111827;
+        }
+
+        .toggle-btn:hover {
+          background-color: #e5e7eb;
+          color: #111827;
+        }
+
+        .toggle-btn.active {
+          background-color: #dbeafe;
+          border-color: #60a5fa;
+          color: #1e3a8a;
+        }
+
+        .reset-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          background-color: #fee2e2;
+          color: #b91c1c;
+          border: none;
+          border-radius: 8px;
+          padding: 10px 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.2s ease, color 0.2s ease;
+          margin-top: 10px;
+        }
+
+        .reset-btn:hover {
+          background-color: #fecaca;
+          color: #7f1d1d;
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .accessibility-panel {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            border-color: #374151;
+          }
+
+          .accessibility-toggle {
+            background-color: #3b82f6;
+          }
+
+          .accessibility-toggle:hover {
+            background-color: #2563eb;
+          }
+
+          .panel-header h2,
+          .section h3 {
+            color: #f3f4f6;
+          }
+
+          .text-size-controls {
+            background-color: #374151;
+          }
+
+          .text-size-controls button {
+            background-color: #4b5563;
+            color: #f3f4f6;
+          }
+
+          .text-size-controls button:hover {
+            background-color: #6b7280;
+          }
+
+          .toggle-btn {
+            background-color: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
+          }
+
+          .toggle-btn:hover {
+            background-color: #4b5563;
+            color: #f9fafb;
+          }
+
+          .toggle-btn.active {
+            background-color: #1e3a8a;
+            border-color: #3b82f6;
+            color: #ffffff;
+          }
+
+          .reset-btn {
+            background-color: #7f1d1d;
+            color: #fee2e2;
+          }
+
+          .reset-btn:hover {
+            background-color: #991b1b;
+            color: #ffffff;
+          }
+        }
+      `}</style>
     </div>
   );
 }

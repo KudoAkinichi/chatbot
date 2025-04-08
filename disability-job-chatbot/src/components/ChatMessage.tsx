@@ -12,88 +12,156 @@ interface Props {
 export default function ChatMessage({ content, sender, timestamp }: Props) {
   const [isCopied, setIsCopied] = useState(false);
 
-  // Format timestamp
   const formattedTime = new Date(timestamp).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
   });
 
-  // Handle copy to clipboard
   const copyToClipboard = () => {
     navigator.clipboard.writeText(content);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  // Process content with proper formatting
   const processContent = (text: string) => {
-    // First split by new lines
     const lines = text.split("\n");
-    const processedLines = lines.map((line, i) => {
-      // Handle bold text with **
+    const processedLines = lines.map((line) => {
       line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-
-      // Handle bullet points
       if (line.trim().startsWith("•")) {
-        return `<li class="ml-6 list-disc">${line.substring(1).trim()}</li>`;
+        return `<li>${line.substring(1).trim()}</li>`;
       } else if (line.trim() === "") {
         return "<br/>";
       } else {
-        return `<p class="mb-2">${line}</p>`;
+        return `<p>${line}</p>`;
       }
     });
-
     return processedLines.join("");
   };
 
   return (
     <div
-      className={`flex gap-4 p-4 ${
-        sender === "user"
-          ? "bg-blue-50 dark:bg-blue-900/20"
-          : "bg-white dark:bg-gray-800"
-      } border-b border-gray-200 dark:border-gray-700`}
+      className={`chat-message ${sender === "user" ? "user" : "assistant"}`}
       aria-label={`${sender} message`}
     >
-      {/* Avatar */}
-      {/* <div className="flex-shrink-0">
-        <div className="w-4 h-4 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-          <img
-            src={
-              sender === "user" ? "/images/user.png" : "/images/assistant.svg"
-            }
-            alt={sender === "user" ? "User avatar" : "Assistant avatar"}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div> */}
-
-      {/* Message Content */}
-      <div className="flex-1">
-        <div className="flex justify-between items-start mb-1">
-          <span className="font-medium text-sm">
+      <div className="message-content">
+        <div className="message-meta">
+          <span className="sender-name">
             {sender === "user" ? "You" : "Job Assistant"}
           </span>
-          <span className="text-xs text-gray-500">{formattedTime}</span>
+          <span className="timestamp">{formattedTime}</span>
         </div>
 
         <div
-          className="prose prose-sm dark:prose-invert max-w-none"
+          className="message-body"
           dangerouslySetInnerHTML={{ __html: processContent(content) }}
         />
       </div>
 
-      {/* Copy button - only for assistant messages */}
       {sender === "assistant" && (
         <button
           onClick={copyToClipboard}
-          className="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 self-start"
+          className="copy-button"
           aria-label={isCopied ? "Copied to clipboard" : "Copy message"}
           title={isCopied ? "Copied!" : "Copy message"}
         >
           {isCopied ? <Check size={16} /> : <Copy size={16} />}
         </button>
       )}
+
+      <style jsx>{`
+        .chat-message {
+          display: flex;
+          gap: 1rem;
+          padding: 1rem;
+          border-bottom: 1px solid #e5e7eb;
+          background-color: #ffffff;
+        }
+
+        .chat-message.assistant {
+          background-color: #f9fafb;
+        }
+
+        .chat-message.user {
+          background-color: #eff6ff;
+        }
+
+        .dark .chat-message {
+          border-color: #374151;
+        }
+
+        .dark .chat-message.assistant {
+          background-color: #1f2937;
+        }
+
+        .dark .chat-message.user {
+          background-color: #1e40af33;
+        }
+
+        .message-content {
+          flex: 1;
+        }
+
+        .message-meta {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.25rem;
+        }
+
+        .sender-name {
+          font-weight: 500;
+          font-size: 0.875rem;
+        }
+
+        .timestamp {
+          font-size: 0.75rem;
+          color: #6b7280;
+        }
+
+        .dark .timestamp {
+          color: #9ca3af;
+        }
+
+        .message-body {
+          font-size: 0.9rem;
+          color: #111827;
+        }
+
+        .dark .message-body {
+          color: #f3f4f6;
+        }
+
+        .message-body p {
+          margin-bottom: 0.5rem;
+        }
+
+        .message-body ul {
+          list-style-type: disc;
+          padding-left: 1.5rem;
+          margin: 0.5rem 0;
+        }
+
+        .copy-button {
+          align-self: flex-start;
+          padding: 0.5rem;
+          border: none;
+          background: none;
+          color: #6b7280;
+          cursor: pointer;
+          transition: color 0.2s;
+        }
+
+        .copy-button:hover {
+          color: #111827;
+        }
+
+        .dark .copy-button {
+          color: #9ca3af;
+        }
+
+        .dark .copy-button:hover {
+          color: #f3f4f6;
+        }
+      `}</style>
     </div>
   );
 }

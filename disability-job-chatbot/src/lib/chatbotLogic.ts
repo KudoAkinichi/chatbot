@@ -16,7 +16,7 @@ export type DisabilityData = {
 export const INITIAL_MESSAGE: Message = {
   id: "welcome",
   content:
-    "Hi there! I can help suggest job roles that suit your strengths. Could you tell me about your condition or access needs?",
+    "Hi there! I can help suggest job roles that suit your strengths and accessibility needs. You can also toggle to Gemini mode for general questions using the button at the bottom of the screen.",
   sender: "assistant",
   timestamp: Date.now(),
 };

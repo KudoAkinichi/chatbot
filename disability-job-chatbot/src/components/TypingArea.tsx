@@ -2,13 +2,14 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Trash2, SunMoon } from "lucide-react";
+import { Send, Trash2, SunMoon, Bot, Briefcase } from "lucide-react";
 import { useChat } from "../context/ChatContext";
 
 export default function TypingArea() {
   const [message, setMessage] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const { sendMessage, clearChat, isTyping } = useChat();
+  const { sendMessage, clearChat, isTyping, useGemini, toggleUseGemini } =
+    useChat();
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Initialize dark mode based on system preference or previous setting
@@ -66,7 +67,11 @@ export default function TypingArea() {
               ref={inputRef}
               type="text"
               value={message}
-              placeholder="Enter your question..."
+              placeholder={
+                useGemini
+                  ? "Ask Gemini anything..."
+                  : "Enter your job-related question..."
+              }
               onChange={(e) => setMessage(e.target.value)}
               disabled={isTyping}
               className="w-full p-3 pr-12 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
@@ -83,6 +88,24 @@ export default function TypingArea() {
               </button>
             )}
           </div>
+
+          <button
+            type="button"
+            onClick={toggleUseGemini}
+            className={`p-3 rounded-full border hover:bg-gray-200 dark:hover:bg-gray-700 ${
+              useGemini
+                ? "bg-blue-100 text-blue-600 border-blue-300 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-600"
+                : "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+            }`}
+            aria-label={
+              useGemini
+                ? "Switch to job recommendations"
+                : "Switch to Gemini AI"
+            }
+            aria-pressed={useGemini}
+          >
+            {useGemini ? <Bot size={18} /> : <Briefcase size={18} />}
+          </button>
 
           <button
             type="button"
@@ -106,8 +129,9 @@ export default function TypingArea() {
         </form>
 
         <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
-          This chatbot is to help suggest job roles that may suit your strengths
-          and needs.
+          {useGemini
+            ? "Using Gemini AI for general questions. Gemini may display inaccurate info, so double-check responses."
+            : "This chatbot helps suggest job roles that may suit your strengths and accessibility needs."}
         </p>
       </div>
     </div>

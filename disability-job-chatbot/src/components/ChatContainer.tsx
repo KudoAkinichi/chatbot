@@ -1,4 +1,3 @@
-// src/components/ChatContainer.tsx
 "use client";
 
 import React, { useRef, useEffect } from "react";
@@ -9,14 +8,13 @@ export default function ChatContainer() {
   const { messages, isTyping } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto scroll to bottom on new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
     <div
-      className="flex-1 overflow-y-auto pb-32"
+      className="chat-container"
       aria-label="Chat messages"
       role="log"
     >
@@ -29,39 +27,80 @@ export default function ChatContainer() {
         />
       ))}
 
-      {/* Loading indicator */}
       {isTyping && (
-        <div className="flex gap-4 p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex-shrink-0">
-            {/* <div className="w-4 h-4 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-              <img
-                src="/images/assistant.svg"
-                alt="Assistant avatar"
-                className="w-4 h-4 object-cover animate-pulse"
-              />
-            </div> */}
-          </div>
-          <div className="flex items-center">
-            <div className="flex space-x-2">
-              <div
-                className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce"
-                style={{ animationDelay: "0ms" }}
-              ></div>
-              <div
-                className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce"
-                style={{ animationDelay: "300ms" }}
-              ></div>
-              <div
-                className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce"
-                style={{ animationDelay: "600ms" }}
-              ></div>
-            </div>
+        <div className="typing-indicator">
+          <div className="typing-dots">
+            <div className="dot" style={{ animationDelay: "0ms" }} />
+            <div className="dot" style={{ animationDelay: "200ms" }} />
+            <div className="dot" style={{ animationDelay: "400ms" }} />
           </div>
         </div>
       )}
 
-      {/* Invisible element to scroll to */}
       <div ref={messagesEndRef} />
+      
+      <style jsx>{`
+        .chat-container {
+          flex: 1;
+          overflow-y: auto;
+          padding-bottom: 8rem;
+          padding: 1rem;
+          background: #f9fafb;
+          color: #111827;
+        }
+
+        .typing-indicator {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          background-color: #ffffff;
+          border-top: 1px solid #e5e7eb;
+          margin-top: 0.5rem;
+          border-radius: 8px;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+          max-width: 160px;
+        }
+
+        .typing-dots {
+          display: flex;
+          gap: 6px;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: #9ca3af;
+          animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .chat-container {
+            background-color: #111827;
+            color: #f9fafb;
+          }
+
+          .typing-indicator {
+            background-color: #1f2937;
+            border-color: #374151;
+          }
+
+          .dot {
+            background-color: #6b7280;
+          }
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-// src/components/TypingArea.tsx
+// TypingArea.tsx
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -8,132 +8,167 @@ import { useChat } from "../context/ChatContext";
 export default function TypingArea() {
   const [message, setMessage] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const { sendMessage, clearChat, isTyping, useGemini, toggleUseGemini } =
-    useChat();
+  const { sendMessage, clearChat, isTyping, useGemini, toggleUseGemini } = useChat();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize dark mode based on system preference or previous setting
   useEffect(() => {
     const darkModeSetting = localStorage.getItem("darkMode");
-    if (darkModeSetting === "true") {
-      setIsDarkMode(true);
-      document.documentElement.classList.add("dark");
-    } else if (darkModeSetting === "false") {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    } else {
-      // Check system preference
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setIsDarkMode(systemPrefersDark);
-      if (systemPrefersDark) {
-        document.documentElement.classList.add("dark");
-      }
-    }
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const shouldUseDark = darkModeSetting === "true" || (!darkModeSetting && prefersDark);
+
+    setIsDarkMode(shouldUseDark);
+    document.documentElement.classList.toggle("dark", shouldUseDark);
   }, []);
 
-  // Toggle dark mode
   const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    if (!isDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("darkMode", "true");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("darkMode", "false");
-    }
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    document.documentElement.classList.toggle("dark", newMode);
+    localStorage.setItem("darkMode", newMode.toString());
   };
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim() && !isTyping) {
       sendMessage(message);
       setMessage("");
-      // Focus back on input after sending
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4 shadow-lg">
-      <div className="max-w-4xl mx-auto">
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <div className="relative flex-1">
-            <input
-              ref={inputRef}
-              type="text"
-              value={message}
-              placeholder={
-                useGemini
-                  ? "Ask Gemini anything..."
-                  : "Enter your job-related question..."
-              }
-              onChange={(e) => setMessage(e.target.value)}
-              disabled={isTyping}
-              className="w-full p-3 pr-12 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-              aria-label="Type your message"
-            />
-            {message.trim() && (
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                disabled={isTyping}
-                aria-label="Send message"
-              >
-                <Send size={18} />
-              </button>
-            )}
-          </div>
+    <div style={styles.container}>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <div style={styles.inputWrapper}>
+          <input
+            ref={inputRef}
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            disabled={isTyping}
+            placeholder={
+              useGemini
+                ? "Ask Gemini anything..."
+                : "Enter your job-related question..."
+            }
+            style={styles.input}
+          />
+          {message.trim() && (
+            <button type="submit" style={styles.sendButton} aria-label="Send message">
+              <Send size={20} />
+            </button>
+          )}
+        </div>
 
+        <div style={styles.buttonGroup}>
+          {/* 🔄 Gemini Toggle */}
           <button
             type="button"
             onClick={toggleUseGemini}
-            className={`p-3 rounded-full border hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              useGemini
-                ? "bg-blue-100 text-blue-600 border-blue-300 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-600"
-                : "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
-            }`}
-            aria-label={
-              useGemini
-                ? "Switch to job recommendations"
-                : "Switch to Gemini AI"
-            }
-            aria-pressed={useGemini}
+            style={{
+              ...styles.iconButton,
+              backgroundColor: useGemini ? "#d0ebff" : "#eeeeee",
+              color: useGemini ? "#0056b3" : "#333",
+              border: `1px solid ${useGemini ? "#99ccff" : "#ccc"}`
+            }}
+            aria-label="Gemini toggle"
           >
-            {useGemini ? <Bot size={18} /> : <Briefcase size={18} />}
+            {useGemini ? <Bot size={20} /> : <Briefcase size={20} />}
           </button>
 
+          {/* 🌓 Dark Mode Toggle */}
           <button
             type="button"
             onClick={toggleDarkMode}
-            className="p-3 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700"
-            aria-label={
-              isDarkMode ? "Switch to light mode" : "Switch to dark mode"
-            }
+            style={styles.iconButton}
+            aria-label="Toggle dark mode"
           >
             <SunMoon size={18} />
           </button>
 
+          {/* 🗑️ Clear Chat */}
           <button
             type="button"
             onClick={clearChat}
-            className="p-3 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700"
-            aria-label="Clear chat history"
+            style={styles.iconButton}
+            aria-label="Clear chat"
           >
             <Trash2 size={18} />
           </button>
-        </form>
+        </div>
+      </form>
 
-        <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
-          {useGemini
-            ? "Using Gemini AI for general questions. Gemini may display inaccurate info, so double-check responses."
-            : "This chatbot helps suggest job roles that may suit your strengths and accessibility needs."}
-        </p>
-      </div>
+      <p style={styles.helperText}>
+        {useGemini
+          ? "Using Gemini AI for general questions. Please verify the answers."
+          : "This assistant recommends jobs based on your strengths and accessibility preferences."}
+      </p>
     </div>
   );
 }
+
+const styles: { [key: string]: React.CSSProperties } = {
+  container: {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: "1rem",
+    backgroundColor: "#1e293b", // dark mode bg
+    borderTop: "1px solid #2f3e4e",
+    zIndex: 1000
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.75rem",
+    maxWidth: "900px",
+    margin: "0 auto"
+  },
+  inputWrapper: {
+    position: "relative",
+    width: "100%"
+  },
+  input: {
+    width: "100%",
+    padding: "0.75rem 3rem 0.75rem 1.25rem",
+    borderRadius: "9999px",
+    border: "1px solid #444",
+    backgroundColor: "#334155",
+    fontSize: "0.95rem",
+    color: "#f1f5f9"
+  },
+  sendButton: {
+    position: "absolute",
+    right: "0.75rem",
+    top: "50%",
+    transform: "translateY(-50%)",
+    background: "none",
+    border: "none",
+    color: "#38bdf8",
+    cursor: "pointer"
+  },
+  buttonGroup: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "0.75rem"
+  },
+  iconButton: {
+    width: "44px",
+    height: "44px",
+    borderRadius: "50%",
+    border: "1px solid #444",
+    backgroundColor: "#334155",
+    color: "#cbd5e1",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer"
+  },
+  helperText: {
+    textAlign: "center",
+    marginTop: "0.5rem",
+    fontSize: "0.75rem",
+    color: "#cbd5e1"
+  }
+};

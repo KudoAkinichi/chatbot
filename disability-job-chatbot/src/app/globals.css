@@ -63,6 +63,11 @@ body.readable-font {
   font-family: Verdana, Geneva, sans-serif;
 }
 
+body.hide-chat {
+  overflow: hidden;
+}
+
+
 body.readable-font h1,
 body.readable-font h2,
 body.readable-font h3,

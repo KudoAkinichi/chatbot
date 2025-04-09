@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAccessibility } from "../context/AccessibilityContext";
 import {
   ChevronLeft,
@@ -30,9 +30,26 @@ export default function AccessibilityPanel() {
     resetSettings,
   } = useAccessibility();
 
+  useEffect(() => {
+    const htmlElement = document.documentElement;
+
+    htmlElement.style.fontSize = `${settings.fontSize}px`;
+
+    const toggleClass = (condition: boolean, className: string) => {
+      if (condition) htmlElement.classList.add(className);
+      else htmlElement.classList.remove(className);
+    };
+
+    toggleClass(settings.isHighContrast, "high-contrast-mode");
+    toggleClass(settings.isGrayscale, "grayscale-mode");
+    toggleClass(settings.isNegativeContrast, "negative-contrast-mode");
+    toggleClass(settings.isLightBackground, "light-background-mode");
+    toggleClass(settings.areLinksUnderlined, "underline-links-mode");
+    toggleClass(settings.isReadableFont, "readable-font-mode");
+  }, [settings]);
+
   return (
     <div className="accessibility-container">
-      {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="accessibility-toggle"
@@ -40,25 +57,22 @@ export default function AccessibilityPanel() {
       >
         {isOpen ? (
           <>
-            <ChevronRight size={20} /> <span className="sr-only">Close</span>
+            <ChevronRight size={20} />
+            <span className="sr-only">Close</span>
           </>
         ) : (
           <>
-            <ChevronLeft size={20} /> <span>Accessibility</span>
+            <ChevronLeft size={20} />
+            <span>Accessibility</span>
           </>
         )}
       </button>
 
-      {/* Panel */}
       <div className={`accessibility-panel ${isOpen ? "open" : ""}`} role="region" aria-label="Accessibility controls">
         <div className="panel-inner">
           <div className="panel-header">
             <h2>Accessibility Options</h2>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="close-icon"
-              aria-label="Close panel"
-            >
+            <button onClick={() => setIsOpen(false)} className="close-icon" aria-label="Close panel">
               <ChevronRight size={18} />
             </button>
           </div>
@@ -114,7 +128,7 @@ export default function AccessibilityPanel() {
       <style jsx>{`
         .accessibility-container {
           position: fixed;
-          top: 15%; /* Moved higher */
+          top: 15%;
           right: 0;
           z-index: 9999;
           font-family: system-ui, sans-serif;
@@ -234,7 +248,6 @@ export default function AccessibilityPanel() {
 
         .toggle-btn:hover {
           background-color: #e5e7eb;
-          color: #111827;
         }
 
         .toggle-btn.active {
@@ -323,6 +336,73 @@ export default function AccessibilityPanel() {
             background-color: #991b1b;
             color: #ffffff;
           }
+        }
+      `}</style>
+
+      <style jsx global>{`
+        html.high-contrast-mode {
+          filter: contrast(1.5);
+        }
+
+        html.light-background-mode {
+          background-color: #ffffff !important;
+          color: #000000 !important;
+        }
+
+        html.light-background-mode body,
+        html.light-background-mode div:not(.accessibility-panel):not(.accessibility-toggle) {
+          background-color: #ffffff !important;
+          color: #000000 !important;
+        }
+
+        html.grayscale-mode {
+          filter: grayscale(100%);
+        }
+
+        html.negative-contrast-mode {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+          filter: invert(100%) hue-rotate(180deg);
+        }
+
+        html.negative-contrast-mode body,
+        html.negative-contrast-mode div,
+        html.negative-contrast-mode main,
+        html.negative-contrast-mode section,
+        html.negative-contrast-mode header,
+        html.negative-contrast-mode footer {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+        }
+
+        html.negative-contrast-mode img,
+        html.negative-contrast-mode video,
+        html.negative-contrast-mode svg {
+          filter: invert(100%) hue-rotate(180deg);
+        }
+
+        html.high-contrast-mode.grayscale-mode {
+          filter: contrast(1.5) grayscale(100%);
+        }
+
+        html.high-contrast-mode.negative-contrast-mode {
+          filter: invert(100%) contrast(1.5) hue-rotate(180deg);
+        }
+
+        html.grayscale-mode.negative-contrast-mode {
+          filter: invert(100%) grayscale(100%) hue-rotate(180deg);
+        }
+
+        html.high-contrast-mode.grayscale-mode.negative-contrast-mode {
+          filter: invert(100%) contrast(1.5) grayscale(100%) hue-rotate(180deg);
+        }
+
+        html.underline-links-mode a {
+          text-decoration: underline !important;
+        }
+
+        html.readable-font-mode * {
+          font-family: 'Times New Roman', Times, serif !important;
         }
       `}</style>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Check, User, Bot } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 
 interface Props {
   content: string;
@@ -27,8 +27,6 @@ export default function ChatMessage({ content, sender, timestamp }: Props) {
     const lines = text.split("\n");
     const processedLines = lines.map((line) => {
       line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-      line = line.replace(/\*(.*?)\*/g, "<em>$1</em>");
-
       if (line.trim().startsWith("•")) {
         return `<li>${line.substring(1).trim()}</li>`;
       } else if (line.trim() === "") {
@@ -45,18 +43,6 @@ export default function ChatMessage({ content, sender, timestamp }: Props) {
       className={`chat-message ${sender === "user" ? "user" : "assistant"}`}
       aria-label={`${sender} message`}
     >
-      <div className="avatar">
-        {sender === "user" ? (
-          <div className="user-avatar">
-            <User size={18} />
-          </div>
-        ) : (
-          <div className="assistant-avatar">
-            <Bot size={18} />
-          </div>
-        )}
-      </div>
-
       <div className="message-content">
         <div className="message-meta">
           <span className="sender-name">
@@ -74,7 +60,7 @@ export default function ChatMessage({ content, sender, timestamp }: Props) {
       {sender === "assistant" && (
         <button
           onClick={copyToClipboard}
-          className={`copy-button ${isCopied ? "copied" : ""}`}
+          className="copy-button"
           aria-label={isCopied ? "Copied to clipboard" : "Copy message"}
           title={isCopied ? "Copied!" : "Copy message"}
         >
@@ -86,110 +72,72 @@ export default function ChatMessage({ content, sender, timestamp }: Props) {
         .chat-message {
           display: flex;
           gap: 1rem;
-          padding: 1.25rem;
-          border-bottom: 1px solid var(--border-color);
-          background-color: var(--card-background);
-          transition: all 0.2s ease;
-          position: relative;
+          padding: 1rem;
+          border-bottom: 1px solid #e5e7eb;
+          background-color: #ffffff;
         }
 
-        .chat-message:hover {
-          background-color: var(--card-hover-background);
+        .chat-message.assistant {
+          background-color: #f9fafb;
         }
 
         .chat-message.user {
-          border-left: 4px solid var(--accent-color);
+          background-color: #eff6ff;
         }
 
-        .avatar {
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
+        .dark .chat-message {
+          border-color: #374151;
         }
 
-        .user-avatar {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background-color: var(--accent-color);
-          color: white;
+        .dark .chat-message.assistant {
+          background-color: #1f2937;
         }
 
-        .assistant-avatar {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background-color: #10b981;
-          color: white;
+        .dark .chat-message.user {
+          background-color: #1e40af33;
         }
 
         .message-content {
           flex: 1;
-          overflow-wrap: break-word;
         }
 
         .message-meta {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.25rem;
         }
 
         .sender-name {
-          font-weight: 600;
+          font-weight: 500;
           font-size: 0.875rem;
-          color: var(--text-primary);
         }
 
         .timestamp {
           font-size: 0.75rem;
-          color: var(--text-tertiary);
-          font-weight: 400;
+          color: #6b7280;
+        }
+
+        .dark .timestamp {
+          color: #9ca3af;
         }
 
         .message-body {
-          font-size: 0.95rem;
-          line-height: 1.5;
-          color: var(--text-primary);
+          font-size: 0.9rem;
+          color: #111827;
+        }
+
+        .dark .message-body {
+          color: #f3f4f6;
         }
 
         .message-body p {
-          margin-bottom: 0.75rem;
-          line-height: 1.6;
-        }
-
-        .message-body p:last-child {
-          margin-bottom: 0;
-        }
-
-        .message-body strong {
-          font-weight: 600;
-        }
-
-        .message-body em {
-          font-style: italic;
+          margin-bottom: 0.5rem;
         }
 
         .message-body ul {
           list-style-type: disc;
           padding-left: 1.5rem;
-          margin: 0.75rem 0;
-        }
-
-        .message-body li {
-          margin-bottom: 0.5rem;
-        }
-
-        .message-body li:last-child {
-          margin-bottom: 0;
+          margin: 0.5rem 0;
         }
 
         .copy-button {
@@ -197,25 +145,21 @@ export default function ChatMessage({ content, sender, timestamp }: Props) {
           padding: 0.5rem;
           border: none;
           background: none;
-          color: var(--text-tertiary);
+          color: #6b7280;
           cursor: pointer;
-          transition: all 0.2s ease;
-          border-radius: 0.25rem;
-          opacity: 0;
-          margin-right: -0.5rem;
-        }
-
-        .chat-message:hover .copy-button {
-          opacity: 1;
+          transition: color 0.2s;
         }
 
         .copy-button:hover {
-          color: var(--text-primary);
-          background-color: var(--card-hover-background);
+          color: #111827;
         }
 
-        .copy-button.copied {
-          color: #10b981;
+        .dark .copy-button {
+          color: #9ca3af;
+        }
+
+        .dark .copy-button:hover {
+          color: #f3f4f6;
         }
       `}</style>
     </div>

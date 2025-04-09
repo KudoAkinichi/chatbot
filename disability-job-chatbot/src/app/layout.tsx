@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { AccessibilityProvider } from "@/context/AccessibilityContext";
 import { ChatProvider } from "@/context/ChatContext";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import { ThemeProvider } from "@/context/ThemeContext";
 
 export const metadata: Metadata = {
   title: "Disability Job Recommendation Chatbot",
@@ -23,20 +22,18 @@ export default function RootLayout({
           Skip to content
         </a>
 
-        <ThemeProvider>
-          <AccessibilityProvider>
-            <ChatProvider>
-              <main id="main-content">{children}</main>
-              <AccessibilityPanel />
-              <div
-                id="keyboard-focus-indicator"
-                className="keyboard-focus-indicator"
-              >
-                Keyboard focus mode active
-              </div>
-            </ChatProvider>
-          </AccessibilityProvider>
-        </ThemeProvider>
+        <AccessibilityProvider>
+          <ChatProvider>
+            <main id="main-content">{children}</main>
+            <AccessibilityPanel />
+            <div
+              id="keyboard-focus-indicator"
+              className="keyboard-focus-indicator"
+            >
+              Keyboard focus mode active
+            </div>
+          </ChatProvider>
+        </AccessibilityProvider>
 
         {/* Script to detect keyboard navigation for better accessibility */}
         <script

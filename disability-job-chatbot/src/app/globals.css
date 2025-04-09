@@ -1,37 +1,15 @@
-@import "tailwindcss";
+@layer theme, base, components, utilities;
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 246, 246, 246;
   --background-end-rgb: 255, 255, 255;
-
-  /* App colors */
-  --app-background: #ffffff;
-  --card-background: #f9fafb;
-  --card-hover-background: #f3f4f6;
-  --input-background: #f9fafb;
-  --border-color: #e5e7eb;
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
-  --accent-color: #3b82f6;
 }
 
 .dark {
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 21, 21, 21;
   --background-end-rgb: 30, 30, 30;
-
-  /* Dark mode app colors */
-  --app-background: #111827;
-  --card-background: #1f2937;
-  --card-hover-background: #263244;
-  --input-background: #334155;
-  --border-color: #374151;
-  --text-primary: #f9fafb;
-  --text-secondary: #e5e7eb;
-  --text-tertiary: #9ca3af;
-  --accent-color: #38bdf8;
 }
 
 body {
@@ -42,45 +20,6 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-}
-
-/* Theme specific global styles */
-body {
-  background-color: var(--app-background);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.chat-container {
-  background-color: var(--app-background) !important;
-  color: var(--text-primary) !important;
-}
-
-.chat-message {
-  background-color: var(--card-background) !important;
-  border-color: var(--border-color) !important;
-  color: var(--text-primary) !important;
-}
-
-.chat-message:hover {
-  background-color: var(--card-hover-background) !important;
-}
-
-.chat-message.user {
-  background-color: var(--card-background) !important;
-  border-left: 4px solid var(--accent-color) !important;
-}
-
-.typing-area-container {
-  background-color: var(--app-background) !important;
-  border-color: var(--border-color) !important;
-}
-
-input,
-button {
-  background-color: var(--input-background);
-  color: var(--text-primary);
-  border-color: var(--border-color);
 }
 
 /* Accessibility Classes */

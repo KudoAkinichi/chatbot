@@ -36,9 +36,7 @@ export default function AccessibilityPanel() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="accessibility-toggle"
-        aria-label={
-          isOpen ? "Close accessibility panel" : "Open accessibility panel"
-        }
+        aria-label={isOpen ? "Close accessibility panel" : "Open accessibility panel"}
       >
         {isOpen ? (
           <>
@@ -51,12 +49,8 @@ export default function AccessibilityPanel() {
         )}
       </button>
 
-      {/* Accessibility Panel */}
-      <div
-        className={`accessibility-panel ${isOpen ? "open" : ""}`}
-        role="region"
-        aria-label="Accessibility controls"
-      >
+      {/* Panel */}
+      <div className={`accessibility-panel ${isOpen ? "open" : ""}`} role="region" aria-label="Accessibility controls">
         <div className="panel-inner">
           <div className="panel-header">
             <h2>Accessibility Options</h2>
@@ -72,75 +66,39 @@ export default function AccessibilityPanel() {
           <div className="section">
             <h3>Text Size</h3>
             <div className="text-size-controls">
-              <button onClick={decreaseTextSize}>
-                <ZoomOut size={18} />
-              </button>
+              <button onClick={decreaseTextSize}><ZoomOut size={18} /></button>
               <span>{settings.fontSize}px</span>
-              <button onClick={increaseTextSize}>
-                <ZoomIn size={18} />
-              </button>
+              <button onClick={increaseTextSize}><ZoomIn size={18} /></button>
             </div>
           </div>
 
           <div className="toggles">
-            <button
-              onClick={toggleGrayscale}
-              className={`toggle-btn ${settings.isGrayscale ? "active" : ""}`}
-              aria-pressed={settings.isGrayscale}
-            >
+            <button onClick={toggleGrayscale} className={`toggle-btn ${settings.isGrayscale ? "active" : ""}`} aria-pressed={settings.isGrayscale}>
               <span>Grayscale</span>
               <Contrast size={18} />
             </button>
 
-            <button
-              onClick={toggleHighContrast}
-              className={`toggle-btn ${settings.isHighContrast ? "active" : ""}`}
-              aria-pressed={settings.isHighContrast}
-            >
+            <button onClick={toggleHighContrast} className={`toggle-btn ${settings.isHighContrast ? "active" : ""}`} aria-pressed={settings.isHighContrast}>
               <span>High Contrast</span>
               <PanelTopClose size={18} />
             </button>
 
-            <button
-              onClick={toggleNegativeContrast}
-              className={`toggle-btn ${
-                settings.isNegativeContrast ? "active" : ""
-              }`}
-              aria-pressed={settings.isNegativeContrast}
-            >
+            <button onClick={toggleNegativeContrast} className={`toggle-btn ${settings.isNegativeContrast ? "active" : ""}`} aria-pressed={settings.isNegativeContrast}>
               <span>Negative Contrast</span>
               <PanelTop size={18} />
             </button>
 
-            <button
-              onClick={toggleLightBackground}
-              className={`toggle-btn ${
-                settings.isLightBackground ? "active" : ""
-              }`}
-              aria-pressed={settings.isLightBackground}
-            >
+            <button onClick={toggleLightBackground} className={`toggle-btn ${settings.isLightBackground ? "active" : ""}`} aria-pressed={settings.isLightBackground}>
               <span>Light Background</span>
               <Laptop2 size={18} />
             </button>
 
-            <button
-              onClick={toggleUnderlineLinks}
-              className={`toggle-btn ${
-                settings.areLinksUnderlined ? "active" : ""
-              }`}
-              aria-pressed={settings.areLinksUnderlined}
-            >
+            <button onClick={toggleUnderlineLinks} className={`toggle-btn ${settings.areLinksUnderlined ? "active" : ""}`} aria-pressed={settings.areLinksUnderlined}>
               <span>Underline Links</span>
               <Underline size={18} />
             </button>
 
-            <button
-              onClick={toggleReadableFont}
-              className={`toggle-btn ${
-                settings.isReadableFont ? "active" : ""
-              }`}
-              aria-pressed={settings.isReadableFont}
-            >
+            <button onClick={toggleReadableFont} className={`toggle-btn ${settings.isReadableFont ? "active" : ""}`} aria-pressed={settings.isReadableFont}>
               <span>Readable Font</span>
               <span style={{ fontFamily: "serif" }}>Aa</span>
             </button>
@@ -153,11 +111,10 @@ export default function AccessibilityPanel() {
         </div>
       </div>
 
-      {/* Styles */}
       <style jsx>{`
         .accessibility-container {
           position: fixed;
-          top: 30%;
+          top: 15%; /* Moved higher */
           right: 0;
           z-index: 9999;
           font-family: system-ui, sans-serif;

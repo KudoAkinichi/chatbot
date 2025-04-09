@@ -1,4 +1,3 @@
-// src/context/ChatContext.tsx
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
@@ -61,18 +60,14 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     }
   }, [messages, disabilityData, useGemini, isInitialized]);
 
-  // Function to toggle between specialized job bot and Gemini
   const toggleUseGemini = () => {
     setUseGemini(!useGemini);
-    // Reset Gemini's conversation history when toggling
     geminiService.resetConversation();
   };
 
-  // Function to send a new message
   const sendMessage = async (content: string) => {
     if (!content.trim() || isTyping) return;
 
-    // Add user message
     const userMessage: Message = {
       id: `user-${Date.now()}`,
       content,
@@ -86,18 +81,14 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     try {
       let response: string;
 
-      // Determine whether to use Gemini or the job recommendation logic
       if (useGemini) {
-        // Get response from Gemini API
         response = await geminiService.getResponse(content);
       } else {
-        // Use the existing disability job recommendation logic
         const result = generateResponse(content, disabilityData);
         response = result.response;
         setDisabilityData(result.updatedData);
       }
 
-      // Add assistant message
       const assistantMessage: Message = {
         id: `assistant-${Date.now()}`,
         content: response,
@@ -109,7 +100,6 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error("Error generating response:", error);
 
-      // Add error message
       const errorMessage: Message = {
         id: `assistant-${Date.now()}`,
         content: `Sorry, I encountered an error: ${
@@ -125,13 +115,11 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Function to clear chat history
+  // ✅ Updated: Removed window.confirm and just resets chat state
   const clearChat = () => {
-    if (window.confirm("Are you sure you want to delete all the chats?")) {
-      setMessages([INITIAL_MESSAGE]);
-      setDisabilityData({ type: null, jobPreference: null });
-      geminiService.resetConversation();
-    }
+    setMessages([INITIAL_MESSAGE]);
+    setDisabilityData({ type: null, jobPreference: null });
+    geminiService.resetConversation();
   };
 
   return (

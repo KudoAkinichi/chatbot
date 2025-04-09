@@ -1,13 +1,13 @@
-// TypingArea.tsx
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Trash2, SunMoon, Bot, Briefcase } from "lucide-react";
+import { Send, Trash2, SunMoon, Bot, Briefcase, X } from "lucide-react";
 import { useChat } from "../context/ChatContext";
 
 export default function TypingArea() {
   const [message, setMessage] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { sendMessage, clearChat, isTyping, useGemini, toggleUseGemini } = useChat();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -36,6 +36,11 @@ export default function TypingArea() {
     }
   };
 
+  const confirmClearChat = () => {
+    clearChat();
+    setShowDeleteModal(false);
+  };
+
   return (
     <div style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
@@ -55,13 +60,13 @@ export default function TypingArea() {
           />
           {message.trim() && (
             <button type="submit" style={styles.sendButton} aria-label="Send message">
-              <Send size={20} />
+              <Send size={18} />
             </button>
           )}
         </div>
 
         <div style={styles.buttonGroup}>
-          {/* 🔄 Gemini Toggle */}
+          {/* Gemini Toggle */}
           <button
             type="button"
             onClick={toggleUseGemini}
@@ -73,27 +78,27 @@ export default function TypingArea() {
             }}
             aria-label="Gemini toggle"
           >
-            {useGemini ? <Bot size={20} /> : <Briefcase size={20} />}
+            {useGemini ? <Bot size={18} /> : <Briefcase size={18} />}
           </button>
 
-          {/* 🌓 Dark Mode Toggle */}
+          {/* Dark Mode Toggle */}
           <button
             type="button"
             onClick={toggleDarkMode}
             style={styles.iconButton}
             aria-label="Toggle dark mode"
           >
-            <SunMoon size={18} />
+            <SunMoon size={16} />
           </button>
 
-          {/* 🗑️ Clear Chat */}
+          {/* Clear Chat */}
           <button
             type="button"
-            onClick={clearChat}
+            onClick={() => setShowDeleteModal(true)}
             style={styles.iconButton}
             aria-label="Clear chat"
           >
-            <Trash2 size={18} />
+            <Trash2 size={16} />
           </button>
         </div>
       </form>
@@ -103,6 +108,29 @@ export default function TypingArea() {
           ? "Using Gemini AI for general questions. Please verify the answers."
           : "This assistant recommends jobs based on your strengths and accessibility preferences."}
       </p>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalContent}>
+            <div style={styles.modalHeader}>
+              <h3>Clear Chat</h3>
+              <button onClick={() => setShowDeleteModal(false)} style={styles.modalClose}>
+                <X size={18} />
+              </button>
+            </div>
+            <p style={{ margin: "1rem 0" }}>Are you sure you want to delete all chat messages?</p>
+            <div style={styles.modalActions}>
+              <button style={styles.cancelBtn} onClick={() => setShowDeleteModal(false)}>
+                Cancel
+              </button>
+              <button style={styles.confirmBtn} onClick={confirmClearChat}>
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -113,15 +141,15 @@ const styles: { [key: string]: React.CSSProperties } = {
     bottom: 0,
     left: 0,
     right: 0,
-    padding: "1rem",
-    backgroundColor: "#1e293b", // dark mode bg
+    padding: "0.5rem 1rem",
+    backgroundColor: "#1e293b",
     borderTop: "1px solid #2f3e4e",
     zIndex: 1000
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "0.75rem",
+    gap: "0.5rem",
     maxWidth: "900px",
     margin: "0 auto"
   },
@@ -131,16 +159,16 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   input: {
     width: "100%",
-    padding: "0.75rem 3rem 0.75rem 1.25rem",
+    padding: "0.55rem 2.75rem 0.55rem 1rem",
     borderRadius: "9999px",
     border: "1px solid #444",
     backgroundColor: "#334155",
-    fontSize: "0.95rem",
+    fontSize: "0.85rem",
     color: "#f1f5f9"
   },
   sendButton: {
     position: "absolute",
-    right: "0.75rem",
+    right: "0.65rem",
     top: "50%",
     transform: "translateY(-50%)",
     background: "none",
@@ -151,11 +179,11 @@ const styles: { [key: string]: React.CSSProperties } = {
   buttonGroup: {
     display: "flex",
     justifyContent: "center",
-    gap: "0.75rem"
+    gap: "0.5rem"
   },
   iconButton: {
-    width: "44px",
-    height: "44px",
+    width: "38px",
+    height: "38px",
     borderRadius: "50%",
     border: "1px solid #444",
     backgroundColor: "#334155",
@@ -167,8 +195,62 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   helperText: {
     textAlign: "center",
-    marginTop: "0.5rem",
-    fontSize: "0.75rem",
+    marginTop: "0.3rem",
+    fontSize: "0.7rem",
     color: "#cbd5e1"
+  },
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9999
+  },
+  modalContent: {
+    backgroundColor: "#f8fafc",
+    color: "#1e293b",
+    padding: "1.5rem",
+    borderRadius: "12px",
+    maxWidth: "400px",
+    width: "90%",
+    boxShadow: "0 0 10px rgba(0,0,0,0.2)"
+  },
+  modalHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  modalClose: {
+    background: "none",
+    border: "none",
+    color: "#1e293b",
+    cursor: "pointer"
+  },
+  modalActions: {
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: "0.75rem",
+    marginTop: "1.25rem"
+  },
+  cancelBtn: {
+    backgroundColor: "#e2e8f0",
+    color: "#1e293b",
+    border: "none",
+    padding: "0.5rem 1rem",
+    borderRadius: "6px",
+    cursor: "pointer"
+  },
+  confirmBtn: {
+    backgroundColor: "#ef4444",
+    color: "#fff",
+    border: "none",
+    padding: "0.5rem 1rem",
+    borderRadius: "6px",
+    cursor: "pointer"
   }
 };

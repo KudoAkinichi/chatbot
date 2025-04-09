@@ -37,7 +37,7 @@ export default function Header() {
   const suggestions = useGemini ? geminiSuggestions : jobSuggestions;
 
   const handleSuggestionClick = (text: string) => {
-    sendMessage(text); // ✅ Triggers actual message flow
+    sendMessage(text);
   };
 
   const containerVariants = {
@@ -104,6 +104,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderBottom: "1px solid rgba(229, 231, 235, 0.2)",
     background: "linear-gradient(to bottom, #eff6ff, #ffffff)",
     color: "#1f2937",
+    overflowX: "hidden",
   },
   header: {
     maxWidth: "1000px",
@@ -138,12 +139,13 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: "#4b5563",
   },
   grid: {
-    display: "grid",
-    gridTemplateColumns: "1fr",
-    gap: "1rem",
+    display: "block",
+    maxHeight: "300px",
+    overflowY: "auto",
+    paddingRight: "0.5rem",
   },
   cardWrapper: {
-    transition: "transform 0.3s",
+    marginBottom: "1rem",
   },
   suggestionCard: {
     display: "flex",

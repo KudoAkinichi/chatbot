@@ -13,40 +13,68 @@ export default function ChatContainer() {
   }, [messages]);
 
   return (
-    <div
-      className="chat-container"
-      aria-label="Chat messages"
-      role="log"
-    >
-      {messages.map((message) => (
-        <ChatMessage
-          key={message.id}
-          content={message.content}
-          sender={message.sender}
-          timestamp={message.timestamp}
-        />
-      ))}
+    <div className="chat-container" aria-label="Chat messages" role="log">
+      <div className="messages-wrapper">
+        {messages.map((message) => (
+          <ChatMessage
+            key={message.id}
+            content={message.content}
+            sender={message.sender}
+            timestamp={message.timestamp}
+          />
+        ))}
 
-      {isTyping && (
-        <div className="typing-indicator">
-          <div className="typing-dots">
-            <div className="dot" style={{ animationDelay: "0ms" }} />
-            <div className="dot" style={{ animationDelay: "200ms" }} />
-            <div className="dot" style={{ animationDelay: "400ms" }} />
+        {isTyping && (
+          <div className="typing-indicator">
+            <div className="typing-dots">
+              <div className="dot" style={{ animationDelay: "0ms" }} />
+              <div className="dot" style={{ animationDelay: "200ms" }} />
+              <div className="dot" style={{ animationDelay: "400ms" }} />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div ref={messagesEndRef} />
-      
+        <div ref={messagesEndRef} className="scroll-marker" />
+      </div>
+
       <style jsx>{`
         .chat-container {
           flex: 1;
-          overflow-y: auto;
-          padding-bottom: 8rem;
-          padding: 1rem;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          position: relative;
           background: #f9fafb;
           color: #111827;
+          height: 100%;
+        }
+
+        .messages-wrapper {
+          flex: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+          scroll-behavior: smooth;
+          scrollbar-width: thin;
+          scrollbar-color: #d1d5db transparent;
+          padding-bottom: 120px; /* Extra space at bottom for input area */
+        }
+
+        .messages-wrapper::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .messages-wrapper::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .messages-wrapper::-webkit-scrollbar-thumb {
+          background-color: #d1d5db;
+          border-radius: 10px;
+        }
+
+        .scroll-marker {
+          height: 1px;
+          width: 100%;
         }
 
         .typing-indicator {
@@ -55,9 +83,9 @@ export default function ChatContainer() {
           padding: 1rem;
           background-color: #ffffff;
           border-top: 1px solid #e5e7eb;
-          margin-top: 0.5rem;
+          margin: 0.5rem 1rem;
           border-radius: 8px;
-          box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
           max-width: 160px;
         }
 
@@ -77,7 +105,8 @@ export default function ChatContainer() {
         }
 
         @keyframes bounce {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
           50% {
@@ -98,6 +127,10 @@ export default function ChatContainer() {
 
           .dot {
             background-color: #6b7280;
+          }
+
+          .messages-wrapper::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
           }
         }
       `}</style>

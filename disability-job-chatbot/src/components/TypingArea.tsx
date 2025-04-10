@@ -126,14 +126,14 @@ export default function TypingArea() {
                 {useGemini ? <Bot size={18} /> : <Briefcase size={18} />}
               </button>
 
-              <button
+              {/* <button
                 type="button"
                 onClick={toggleDarkMode}
                 style={styles.iconButton}
                 aria-label="Toggle dark mode"
               >
                 <SunMoon size={16} />
-              </button>
+              </button> */}
 
               <button
                 type="button"

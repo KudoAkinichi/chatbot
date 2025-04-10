@@ -67,7 +67,6 @@ body.hide-chat {
   overflow: hidden;
 }
 
-
 body.readable-font h1,
 body.readable-font h2,
 body.readable-font h3,
@@ -92,7 +91,6 @@ body.readable-font h6 {
   outline-offset: 2px;
 }
 
-/* Keyboard focus indicator */
 .keyboard-focus-indicator {
   position: fixed;
   z-index: 999;
@@ -112,7 +110,6 @@ body.readable-font h6 {
   opacity: 1;
 }
 
-/* Skip to content link */
 .skip-to-content {
   position: absolute;
   top: -999px;

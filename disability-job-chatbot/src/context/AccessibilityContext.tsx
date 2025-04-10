@@ -1,4 +1,3 @@
-// src/context/AccessibilityContext.tsx
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
@@ -49,7 +48,6 @@ export function AccessibilityProvider({
     useState<AccessibilitySettings>(defaultSettings);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load settings from localStorage on initial client-side render
   useEffect(() => {
     const savedSettings = localStorage.getItem("accessibility-settings");
     if (savedSettings) {
@@ -58,56 +56,47 @@ export function AccessibilityProvider({
     setIsInitialized(true);
   }, []);
 
-  // Save settings to localStorage whenever they change
   useEffect(() => {
     if (isInitialized) {
       localStorage.setItem("accessibility-settings", JSON.stringify(settings));
     }
   }, [settings, isInitialized]);
 
-  // Apply settings to the document
   useEffect(() => {
     if (!isInitialized) return;
 
-    // Font size
     document.documentElement.style.fontSize = `${settings.fontSize}px`;
 
-    // Grayscale
     if (settings.isGrayscale) {
       document.body.classList.add("grayscale");
     } else {
       document.body.classList.remove("grayscale");
     }
 
-    // High contrast
     if (settings.isHighContrast) {
       document.body.classList.add("high-contrast");
     } else {
       document.body.classList.remove("high-contrast");
     }
 
-    // Negative contrast
     if (settings.isNegativeContrast) {
       document.body.classList.add("negative-contrast");
     } else {
       document.body.classList.remove("negative-contrast");
     }
 
-    // Light background
     if (settings.isLightBackground) {
       document.body.classList.add("light-background");
     } else {
       document.body.classList.remove("light-background");
     }
 
-    // Underlined links
     if (settings.areLinksUnderlined) {
       document.body.classList.add("underline-links");
     } else {
       document.body.classList.remove("underline-links");
     }
 
-    // Readable font
     if (settings.isReadableFont) {
       document.body.classList.add("readable-font");
     } else {
@@ -115,7 +104,6 @@ export function AccessibilityProvider({
     }
   }, [settings, isInitialized]);
 
-  // Functions to update settings
   const increaseTextSize = () => {
     setSettings((prev) => ({ ...prev, fontSize: prev.fontSize + 2 }));
   };

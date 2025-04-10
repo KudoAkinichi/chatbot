@@ -56,7 +56,6 @@ export default function TypingArea() {
 
   return (
     <>
-      {/* Chat Button */}
       {!showTypingArea && (
         <button
           onClick={() => setShowTypingArea(true)}
@@ -82,7 +81,6 @@ export default function TypingArea() {
         </button>
       )}
 
-      {/* Typing Area + Modal */}
       {showTypingArea && (
         <div style={styles.container}>
           <form onSubmit={handleSubmit} style={styles.form}>
@@ -125,15 +123,6 @@ export default function TypingArea() {
               >
                 {useGemini ? <Bot size={18} /> : <Briefcase size={18} />}
               </button>
-
-              {/* <button
-                type="button"
-                onClick={toggleDarkMode}
-                style={styles.iconButton}
-                aria-label="Toggle dark mode"
-              >
-                <SunMoon size={16} />
-              </button> */}
 
               <button
                 type="button"

@@ -1,6 +1,3 @@
-
-// src/lib/GeminiService.ts
-
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -12,15 +9,12 @@ export type GeminiMessage = {
 export class GeminiService {
   private history: GeminiMessage[] = [];
 
-  // Reset conversation history
   public resetConversation(): void {
     this.history = [];
   }
 
-  // Generate a response from Gemini API
   public async getResponse(userMessage: string): Promise<string> {
     try {
-      // Add user message to history
       this.history.push({
         role: "user",
         parts: [{ text: userMessage }],
@@ -52,7 +46,6 @@ export class GeminiService {
         parts: [{ text: responseText }],
       });
 
-      // Keep history limited to last 10 messages to avoid token limits
       if (this.history.length > 10) {
         this.history = this.history.slice(this.history.length - 10);
       }

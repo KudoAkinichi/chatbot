@@ -1,4 +1,3 @@
-// src/components/Suggestion.tsx
 "use client";
 
 import React from "react";

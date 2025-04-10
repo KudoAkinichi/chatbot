@@ -15,7 +15,7 @@ export default function ChatMessage({ content, sender, timestamp }: Props) {
   const formattedTime = new Date(timestamp).toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true, // this makes it AM/PM format
+    hour12: true,
   });
 
   const copyToClipboard = () => {

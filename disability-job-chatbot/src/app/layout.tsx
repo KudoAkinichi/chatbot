@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
 import { AccessibilityProvider } from "@/context/AccessibilityContext";
@@ -35,7 +34,6 @@ export default function RootLayout({
           </ChatProvider>
         </AccessibilityProvider>
 
-        {/* Script to detect keyboard navigation for better accessibility */}
         <script
           dangerouslySetInnerHTML={{
             __html: `

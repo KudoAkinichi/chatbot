@@ -56,7 +56,7 @@ export default function ChatContainer() {
           scroll-behavior: smooth;
           scrollbar-width: thin;
           scrollbar-color: #d1d5db transparent;
-          padding-bottom: 120px; /* Extra space at bottom for input area */
+          padding-bottom: 120px;
         }
 
         .messages-wrapper::-webkit-scrollbar {

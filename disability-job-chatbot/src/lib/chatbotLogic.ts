@@ -1,4 +1,3 @@
-// src/lib/chatbotLogic.ts
 import { jobDatabase, identifyDisabilityType } from "../data/jobData";
 
 export type Message = {
@@ -58,22 +57,18 @@ export function generateResponse(
       .map((skill) => `• ${skill}`)
       .join("\n")}\n\n`;
 
-    // Add resume tips
     response += `**Resume Tips:**\n${recommendations.resumeTips
       .map((tip) => `• ${tip}`)
       .join("\n")}\n\n`;
 
-    // Add motivation
     response += `**Remember:**\n${recommendations.motivation[0]}\n\n`;
 
-    // Ask about job preference
     response +=
       "Would you prefer opportunities that are remote or on-site? (Just type 'remote' or 'on-site', or skip this question)";
 
     return { response, updatedData };
   }
 
-  // If job preference is not identified yet
   if (!disabilityData.jobPreference) {
     if (inputLower.includes("remote")) {
       updatedData.jobPreference = "remote";
@@ -107,7 +102,6 @@ export function generateResponse(
     }
   }
 
-  // Handle restart request
   if (
     inputLower.includes("start") ||
     inputLower.includes("new") ||
@@ -121,7 +115,6 @@ export function generateResponse(
     };
   }
 
-  // Handle exploration request
   if (inputLower.includes("more") || inputLower.includes("explore")) {
     const type = disabilityData.type;
     if (!type || !jobDatabase[type]) {
@@ -132,16 +125,13 @@ export function generateResponse(
       };
     }
 
-    // Get additional motivation message
     const recommendations = jobDatabase[type];
     let response = `Here's some additional information that might help you in your job search:\n\n`;
 
-    // Add more motivation
     if (recommendations.motivation.length > 1) {
       response += `${recommendations.motivation[1]}\n\n`;
     }
 
-    // Add more specific advice
     response += `For roles like ${recommendations.jobs.join(
       ", "
     )}, consider joining online communities or forums where professionals with similar needs share their experiences and job opportunities.\n\n`;

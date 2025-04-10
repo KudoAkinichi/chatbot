@@ -115,7 +115,6 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // ✅ Updated: Removed window.confirm and just resets chat state
   const clearChat = () => {
     setMessages([INITIAL_MESSAGE]);
     setDisabilityData({ type: null, jobPreference: null });
